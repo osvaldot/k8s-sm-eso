@@ -1,2 +1,2 @@
-# k8s-sm-eso
-Integrates AWS Secrets Manager in an Kubernetes Cluster with External Secrets Operator
+# Integrate AWS Secrets Manager in an k8s Cluster with External Secrets Operator
+Integrate AWS Secrets Manager in an k8s Cluster with External Secrets Operator
