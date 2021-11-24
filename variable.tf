@@ -47,3 +47,7 @@ variable eks_node_min {
 variable eks_node_max {
   type = number
 }
+
+variable namespaces {
+  type = list
+}
