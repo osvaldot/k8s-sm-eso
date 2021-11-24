@@ -17,3 +17,5 @@ eks_node_max = 5
 # IAM users that will have access to the cluster (the user creating the cluster will always be admin)
 eks_admin_users = ["osvaldo"]
 eks_dev_users = []
+
+namespaces = ["example"]
