@@ -2,7 +2,7 @@
 
 Integrate AWS Secrets Manager in an k8s Cluster with External Secrets Operator
 
-This project IS NOT product ready !
+This project IS NOT production ready !
 
 # Prerequisites
 
@@ -35,3 +35,9 @@ $ terraform validate
 $ terraform plan
 
 $ terraform apply
+
+## Using kubectl
+
+$ make cli
+
+$ aws eks update-kubeconfig --region REGION --name CLUSTER_NAME

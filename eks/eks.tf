@@ -71,3 +71,11 @@ for_each = toset(var.namespaces)
     name = each.key
   }
 }
+
+resource "helm_release" "external-secrets" {
+  name       = "external-secrets"
+  chart      = "external-secrets"
+  repository = "https://charts.external-secrets.io"
+  namespace  = "external-secrets"
+  create_namespace = true
+}
