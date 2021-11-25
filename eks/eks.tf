@@ -72,10 +72,36 @@ for_each = toset(var.namespaces)
   }
 }
 
-resource "helm_release" "external-secrets" {
-  name       = "external-secrets"
-  chart      = "external-secrets"
-  repository = "https://charts.external-secrets.io"
-  namespace  = "external-secrets"
-  create_namespace = true
+resource "aws_iam_role" "service_account" {
+  for_each = toset(var.namespaces)
+
+  name = "${var.project}-${each.key}-ServiceAccoutRole"
+  assume_role_policy = templatefile(
+    "${path.module}/files/iam-role.json",
+    {
+      oidc_provider_arn = module.eks.oidc_provider_arn
+      cluster_oidc_issuer_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+      service_account_namespace = each.key
+      service_account_name = each.key
+    }
+  )
+
+  tags = {
+    Cluster = var.project
+    Namespace = each.key
+  }  
+}
+
+resource "kubectl_manifest" "service_account" {
+  for_each = toset(var.namespaces)
+
+  yaml_body = templatefile(
+    "${path.module}/files/service-account.yaml",
+    {
+      namespace = each.key
+      service_account_name = each.key
+      account_id = data.aws_caller_identity.current.account_id
+      iam_role_name = aws_iam_role.service_account[each.key].name
+    }
+  )
 }
