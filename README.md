@@ -41,3 +41,12 @@ $ terraform apply
 $ make cli
 
 $ aws eks update-kubeconfig --region REGION --name CLUSTER_NAME
+
+## Secret refresh
+
+$ kubectl annotate es externalsecret-example -n example force-sync=$(date +%s) --overwrite
+
+## Verify secrets
+
+$ kubectl get secret example-secret -n example -o jsonpath='{.data}'
+$ echo 'MTIzNDU2' | base64 -d

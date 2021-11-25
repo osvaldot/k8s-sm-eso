@@ -24,6 +24,24 @@ module "eks" {
   depends_on = [ module.vpc ]
 }
 
+module "sm" {
+  source = "./secrets-manager"
+  project = var.project
+  namespaces = var.namespaces
+  service_accounts_role = module.eks.service_accounts_role
+
+  depends_on = [module.eks]
+}
+
+
+module "eso" {
+  source = "./eso"
+  aws_default_region = var.aws_default_region
+  service_accounts = module.eks.service_accounts
+  namespaces = var.namespaces
+
+  depends_on = [module.eks, module.sm]
+}
 
 ### CUSTOM DATA SOURCES
 data "aws_eks_cluster" "cluster" {
