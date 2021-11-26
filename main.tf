@@ -43,6 +43,13 @@ module "eso" {
   depends_on = [module.eks, module.sm]
 }
 
+module "reloader" {
+  source = "./stakater-reloader"
+  namespaces = var.namespaces
+
+  depends_on = [module.eks, module.sm, module.eso]
+}
+
 ### CUSTOM DATA SOURCES
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
