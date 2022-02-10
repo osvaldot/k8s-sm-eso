@@ -16,16 +16,14 @@ terraform {
 }
 
 resource "helm_release" "reloader" {
-  for_each = toset(var.namespaces)
-
-  name       = "reloader-${each.key}"
+  name       = "reloader-${var.namespaces}"
   chart      = "reloader"
   repository = "https://stakater.github.io/stakater-charts"
-  namespace  = each.key
-  # version    = "v0.0.103"
+  namespace  = var.namespaces
+  version    = "v0.0.103"
 
   set {
-    name = "reloader.watchGlobally"
-    value =false
+    name  = "reloader.watchGlobally"
+    value = false
   }
 }

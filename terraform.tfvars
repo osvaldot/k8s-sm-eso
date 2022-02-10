@@ -18,4 +18,4 @@ eks_node_max = 5
 eks_admin_users = ["osvaldo"]
 eks_dev_users = []
 
-namespaces = ["example"]
+namespaces = "example"

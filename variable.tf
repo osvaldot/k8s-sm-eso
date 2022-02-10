@@ -49,5 +49,5 @@ variable eks_node_max {
 }
 
 variable namespaces {
-  type = list
+  type = string
 }

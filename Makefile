@@ -1,14 +1,9 @@
-include .env
-
 build-cli:
-	docker build -t "$$(printf '%s/terraform-cli' "$${PWD##*/}" | tr -d .):${TERRAFORM_VERSION}" \
-		--build-arg TERRAFORM_VERSION=${TERRAFORM_VERSION} \
-		--build-arg KUBECTL_VERSION=${KUBECTL_VERSION} \
-		.
+	docker build -t "$$(printf '%s/terraform-cli' "$${PWD##*/}" | tr -d .):1.0.10" .
 
 cli:
 	@touch .env || true
 	@docker run --rm -it --workdir /app \
 	--entrypoint bash -v $${PWD}:/app \
 	--env-file .env \
-	"$$(printf '%s/terraform-cli' "$${PWD##*/}" | tr -d .):${TERRAFORM_VERSION}"		
+	"$$(printf '%s/terraform-cli' "$${PWD##*/}" | tr -d .):1.0.10"		

@@ -34,7 +34,7 @@ module "eks" {
 
   # Enable OIDC Provider
   enable_irsa = true
-  write_kubeconfig = false
+  write_kubeconfig = true
 
   node_groups = {
     core = {
@@ -60,48 +60,41 @@ module "eks" {
 }
 
 # Create Application namespaces
-resource "kubernetes_namespace" "cluster_namespaces" {
-for_each = toset(var.namespaces)
-
+resource "kubernetes_namespace" "namespace" {
   metadata {
     labels = {
       Cluster = var.project
     }
-
-    name = each.key
+    name = var.namespaces
   }
 }
 
 resource "aws_iam_role" "service_account" {
-  for_each = toset(var.namespaces)
-
-  name = "${var.project}-${each.key}-ServiceAccoutRole"
+  name = "${var.project}-${var.namespaces}-ServiceAccoutRole"
   assume_role_policy = templatefile(
     "${path.module}/files/iam-role.json",
     {
       oidc_provider_arn = module.eks.oidc_provider_arn
       cluster_oidc_issuer_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-      service_account_namespace = each.key
-      service_account_name = each.key
+      service_account_namespace = var.namespaces
+      service_account_name = var.namespaces
     }
   )
 
   tags = {
     Cluster = var.project
-    Namespace = each.key
+    Namespace = var.namespaces
   }  
 }
 
 resource "kubectl_manifest" "service_account" {
-  for_each = toset(var.namespaces)
-
   yaml_body = templatefile(
     "${path.module}/files/service-account.yaml",
     {
-      namespace = each.key
-      service_account_name = each.key
+      namespace = var.namespaces
+      service_account_name = var.namespaces
       account_id = data.aws_caller_identity.current.account_id
-      iam_role_name = aws_iam_role.service_account[each.key].name
+      iam_role_name = aws_iam_role.service_account.name
     }
   )
 }
