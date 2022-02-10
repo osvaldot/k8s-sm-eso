@@ -2,7 +2,7 @@
 
 Integrate [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) in [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/) with [External Secrets Operator](https://external-secrets.io/)
 
-Note: the project is NOT a prodction ready code, this is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/).
+Note: the project is NOT a production ready code, is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/).
 
 
 ## Prerequisites
