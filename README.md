@@ -1,6 +1,6 @@
 # Integrate external secret management systems in Kubernetes
 
-Integrate AWS Secrets Manager in a Kubernetes cluster with External Secrets Operator
+Integrate [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) in [Kubernetes](https://kubernetes.io/) [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/) with [External Secrets Operator](https://external-secrets.io/)
 
 Note: the project is NOT a prodction ready code, this is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/).
 
