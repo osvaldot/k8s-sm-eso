@@ -1,4 +1,4 @@
-module "vpc" {
+module "tf_vpc" {
   source = "./vpc"
   project = var.project
   cidr_block = var.vpc_cidr_block
@@ -7,12 +7,12 @@ module "vpc" {
   private_subnet_block = var.vpc_private_subnet_block
 }
 
-module "eks" {
+module "tf_eks" {
   source = "./eks"
   project = var.project
-  vpc_id = module.vpc.vpc_id
+  vpc_id = module.tf_vpc.vpc_id
   cidr_block = var.vpc_cidr_block
-  subnets = module.vpc.private_subnets
+  subnets = module.tf_vpc.private_subnets
   admin_users = var.eks_admin_users
   dev_users = var.eks_dev_users
   node_instance_types = var.eks_node_instance_types
@@ -21,42 +21,41 @@ module "eks" {
   node_max = var.eks_node_max
   namespaces = var.namespaces
 
-  depends_on = [ module.vpc ]
+  depends_on = [ module.tf_vpc ]
 }
 
-module "sm" {
+module "tf_sm" {
   source = "./secrets-manager"
   project = var.project
   namespaces = var.namespaces
-  service_accounts_role = module.eks.service_accounts_role
+  service_accounts_role = module.tf_eks.service_accounts_role
 
-  depends_on = [module.eks]
+  depends_on = [module.tf_eks]
 }
 
-
-module "eso" {
+module "tf_eso" {
   source = "./eso"
   aws_default_region = var.aws_default_region
-  service_accounts = module.eks.service_accounts
+  service_accounts = module.tf_eks.service_accounts
   namespaces = var.namespaces
 
-  depends_on = [module.eks, module.sm]
+  depends_on = [module.tf_eks, module.tf_sm]
 }
 
 module "reloader" {
   source = "./stakater-reloader"
   namespaces = var.namespaces
 
-  depends_on = [module.eks, module.sm, module.eso]
+  depends_on = [module.tf_eks, module.tf_sm, module.tf_eso]
 }
 
 ### CUSTOM DATA SOURCES
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
+  name = module.tf_eks.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
+  name = module.tf_eks.cluster_id
 }
 
 ### PROVIDERS

@@ -1,52 +1,50 @@
-# Integrate AWS Secrets Manager in an k8s Cluster with External Secrets Operator
+# Integrate external secret management systems in Kubernetes
 
-Integrate AWS Secrets Manager in an k8s Cluster with External Secrets Operator
+Integrate AWS Secrets Manager in a Kubernetes cluster with External Secrets Operator
 
-This project IS NOT production ready !
+Note: the project is NOT a prodction ready code, this is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/).
 
-# Prerequisites
 
-AWS account
+## Prerequisites
 
-##
+Before we start, let's make sure we meet these requirements:
 
-VPC
-EKS
-ASM
-ESO
-store
+- An AWS account and an IAM user with administrator permissions
+- Docker installed and running on your local machine
+- A basic knowledge of Terraform
 
-EXAMPLE
+Copy env.template to .env file and use your IAM user credentials to fill AWS_ACCESS_KEY_ID and
+AWS_SECRET_ACCESS_KEY values, then specify the AWS_DEFAULT_REGION.
+
+## Build cli docker image
+
+`$ make build-cli`
 
 ## Build
 
-Build the cli image
+`$ make cli`
 
-$ make build-cli
+`$ terraform init`
 
-## Create the cluster
+`$ terraform validate`
 
-$ make cli
+`$ terraform plan`
 
-$ terraform init
+`$ terraform apply`
 
-$ terraform validate
+## kubectl configuration
 
-$ terraform plan
+Inside the cli
 
-$ terraform apply
+`$ aws eks update-kubeconfig --region REGION --name CLUSTER_NAME`
 
-## Using kubectl
+## Tips
 
-$ make cli
+Force secret update
 
-$ aws eks update-kubeconfig --region REGION --name CLUSTER_NAME
-
-## Secret refresh
-
-$ kubectl annotate es externalsecret-example -n example force-sync=$(date +%s) --overwrite
+`$ kubectl annotate es externalsecret-example -n example force-sync=$(date +%s) --overwrite`
 
 ## Verify secrets
 
-$ kubectl get secret example-secret -n example -o jsonpath='{.data}'
-$ echo 'MTIzNDU2' | base64 -d
+`$ kubectl get secret example-secret -n example -o jsonpath='{.data}'`
+`$ echo 'MTIzNDU2' | base64 -d`

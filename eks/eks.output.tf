@@ -15,13 +15,15 @@ output "cluster_oidc_issuer_url" {
 }
 
 output "service_accounts_role" {
-  value = tomap({
-    for k, inst in aws_iam_role.service_account : k => inst.name
-  })  
+  value = aws_iam_role.service_account.name
+  # value = tomap({
+  #   for k, inst in aws_iam_role.service_account : k => inst.name
+  # })  
 }
 
 output "service_accounts" {
-  value = tomap({
-    for k, inst in kubectl_manifest.service_account : k => inst.name
-  })    
+  value = kubectl_manifest.service_account.name
+  # value = tomap({
+  #   for k, inst in kubectl_manifest.service_account : k => inst.name
+  # })    
 }

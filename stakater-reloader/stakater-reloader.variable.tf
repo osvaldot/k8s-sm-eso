@@ -1,3 +1,3 @@
 variable  namespaces {
-  type = list
+  type = string
 }

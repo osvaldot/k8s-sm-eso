@@ -1,5 +1,5 @@
 variable namespaces {
-  type = list
+  type = string
 }
 
 variable project {
@@ -7,5 +7,5 @@ variable project {
 }
 
 variable service_accounts_role {
-  type = map
+  type = string
 }

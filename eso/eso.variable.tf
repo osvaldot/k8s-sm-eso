@@ -3,9 +3,9 @@ variable aws_default_region {
 }
 
 variable service_accounts {
-  type = map
+  type = string
 }
 
 variable namespaces {
-  type = list
+  type = string
 }

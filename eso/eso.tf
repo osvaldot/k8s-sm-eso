@@ -4,28 +4,28 @@ resource "helm_release" "external-secrets" {
   repository = "https://charts.external-secrets.io"
   namespace  = "external-secrets"
   create_namespace = true
+  version    = "0.3.11"
 }
 
 resource "kubectl_manifest" "secret_store" {
-  for_each = var.service_accounts
-
   yaml_body = templatefile(
     "${path.module}/files/secret-store.yaml",
     {
-      namespace = each.key
+      namespace = var.service_accounts
       aws_region = var.aws_default_region
-      service_account_name = each.value
+      service_account_name = var.service_accounts
     }
   )
+
+  depends_on = [helm_release.external-secrets]
 }
 
 resource "kubectl_manifest" "external_secret" {
-  for_each = toset(var.namespaces)
-
   yaml_body = templatefile(
     "${path.module}/files/external-secret.yaml",
     {
-      namespace = each.key      
+      namespace = var.service_accounts      
     }
   )
+  depends_on = [kubectl_manifest.secret_store]
 }
