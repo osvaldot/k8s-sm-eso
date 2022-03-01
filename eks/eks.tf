@@ -41,8 +41,6 @@ module "eks" {
       desired_capacity = var.node_desired
       min_capacity     = var.node_min
       max_capacity     = var.node_max
-      create_launch_template = true
-      disk_type = "gp3"
 
       instance_types = var.node_instance_types
       capacity_type  = "ON_DEMAND"
