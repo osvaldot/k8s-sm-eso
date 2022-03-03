@@ -2,10 +2,10 @@ variable aws_default_region {
   type = string
 }
 
-variable service_accounts {
+variable service_account {
   type = string
 }
 
-variable namespaces {
+variable project {
   type = string
 }

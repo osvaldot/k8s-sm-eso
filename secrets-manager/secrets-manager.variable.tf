@@ -1,4 +1,4 @@
-variable namespaces {
+variable cluster {
   type = string
 }
 
@@ -6,6 +6,6 @@ variable project {
   type = string
 }
 
-variable service_accounts_role {
+variable service_account_role {
   type = string
 }

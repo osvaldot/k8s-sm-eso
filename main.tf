@@ -1,6 +1,6 @@
 module "tf_vpc" {
   source = "./vpc"
-  project = var.project
+  cluster = var.cluster
   cidr_block = var.vpc_cidr_block
   azs = var.vpc_azs
   public_subnet_block = var.vpc_public_subnet_block
@@ -9,7 +9,7 @@ module "tf_vpc" {
 
 module "tf_eks" {
   source = "./eks"
-  project = var.project
+  cluster = var.cluster
   vpc_id = module.tf_vpc.vpc_id
   cidr_block = var.vpc_cidr_block
   subnets = module.tf_vpc.private_subnets
@@ -19,16 +19,16 @@ module "tf_eks" {
   node_desired = var.eks_node_desired
   node_min = var.eks_node_min
   node_max = var.eks_node_max
-  namespaces = var.namespaces
+  project = var.project
 
   depends_on = [ module.tf_vpc ]
 }
 
 module "tf_sm" {
   source = "./secrets-manager"
+  cluster = var.cluster
   project = var.project
-  namespaces = var.namespaces
-  service_accounts_role = module.tf_eks.service_accounts_role
+  service_account_role = module.tf_eks.service_account_role
 
   depends_on = [module.tf_eks]
 }
@@ -36,15 +36,15 @@ module "tf_sm" {
 module "tf_eso" {
   source = "./eso"
   aws_default_region = var.aws_default_region
-  service_accounts = module.tf_eks.service_accounts
-  namespaces = var.namespaces
+  service_account = module.tf_eks.service_account
+  project = var.project
 
   depends_on = [module.tf_eks, module.tf_sm]
 }
 
 module "reloader" {
   source = "./stakater-reloader"
-  namespaces = var.namespaces
+  project = var.project
 
   depends_on = [module.tf_eks, module.tf_sm, module.tf_eso]
 }

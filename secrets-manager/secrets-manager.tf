@@ -1,15 +1,15 @@
 resource "aws_secretsmanager_secret" "secret" {
-  name = var.namespaces
+  name = var.project
   recovery_window_in_days = 0
 
   tags = {    
-    Cluster = var.project
-    Namespace = var.namespaces
+    Cluster = var.cluster
+    Project = var.project
   }
 }
 
 resource "aws_iam_policy" "access_secrets" {
-  name = "${var.namespaces}-AccessSecrets"
+  name = "${var.project}-AccessSecrets"
   path = "/"
 
   policy = templatefile(
@@ -21,6 +21,6 @@ resource "aws_iam_policy" "access_secrets" {
 }
 
 resource "aws_iam_role_policy_attachment" "access_secrets" {
-  role = var.service_accounts_role
+  role = var.service_account_role
   policy_arn = aws_iam_policy.access_secrets.arn
 }
