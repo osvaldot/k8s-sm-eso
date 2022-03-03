@@ -1,7 +1,3 @@
-variable project {
-  type = string
-}
-
 variable cidr_block {
   type = string
 }
@@ -16,4 +12,8 @@ variable public_subnet_block {
 
 variable private_subnet_block {
   type = list
+}
+
+variable cluster {
+  type = string
 }

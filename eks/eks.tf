@@ -15,7 +15,7 @@ locals {
     {
       userarn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${developer_user}"
       username = developer_user
-      groups   = ["${var.project}-developers"]
+      groups   = ["${var.cluster}-developers"]
     }
   ] 
 }
@@ -24,7 +24,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.20.0"
 
-  cluster_name = var.project
+  cluster_name = var.cluster
   cluster_version  = "1.21"
   vpc_id  = var.vpc_id
   subnets = var.subnets
@@ -53,35 +53,35 @@ module "eks" {
   map_users = concat(local.admin_user_map_users, local.developer_user_map_users)
 
   tags = {
-    Cluster = var.project
+    Cluster = var.cluster
   }
 }
 
-# Create Application namespaces
+# Create Application namespace
 resource "kubernetes_namespace" "namespace" {
   metadata {
     labels = {
-      Cluster = var.project
+      Cluster = var.cluster
     }
-    name = var.namespaces
+    name = var.project
   }
 }
 
 resource "aws_iam_role" "service_account" {
-  name = "${var.project}-${var.namespaces}-ServiceAccoutRole"
+  name = "${var.cluster}-${var.project}-ServiceAccoutRole"
   assume_role_policy = templatefile(
     "${path.module}/files/iam-role.json",
     {
       oidc_provider_arn = module.eks.oidc_provider_arn
       cluster_oidc_issuer_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-      service_account_namespace = var.namespaces
-      service_account_name = var.namespaces
+      service_account_namespace = var.project
+      service_account_name = "${var.project}-eso"
     }
   )
 
   tags = {
-    Cluster = var.project
-    Namespace = var.namespaces
+    Cluster = var.cluster
+    Project = var.project
   }  
 }
 
@@ -89,8 +89,8 @@ resource "kubectl_manifest" "service_account" {
   yaml_body = templatefile(
     "${path.module}/files/service-account.yaml",
     {
-      namespace = var.namespaces
-      service_account_name = var.namespaces
+      namespace = var.project
+      service_account_name = "${var.project}-eso"
       account_id = data.aws_caller_identity.current.account_id
       iam_role_name = aws_iam_role.service_account.name
     }

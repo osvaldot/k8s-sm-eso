@@ -38,6 +38,6 @@ variable node_max {
   type = number
 }
 
-variable namespaces {
+variable cluster {
   type = string
 }

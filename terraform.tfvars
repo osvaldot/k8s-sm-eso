@@ -1,7 +1,7 @@
 ## General
 aws_default_region = "eu-west-1"
 
-project = "eso-asm-example"
+cluster = "eso-cluster"
 
 ## VPC
 vpc_cidr_block = "10.30.0.0/16"
@@ -18,4 +18,4 @@ eks_node_max = 5
 eks_admin_users = ["osvaldo"]
 eks_dev_users = []
 
-namespaces = "example"
+project = "example"

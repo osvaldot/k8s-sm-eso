@@ -25,4 +25,4 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: example-secret
-                  key: api_key
+                  key: API_KEY

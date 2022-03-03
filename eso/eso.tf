@@ -11,9 +11,9 @@ resource "kubectl_manifest" "secret_store" {
   yaml_body = templatefile(
     "${path.module}/files/secret-store.yaml",
     {
-      namespace = var.service_accounts
+      namespace = var.project
       aws_region = var.aws_default_region
-      service_account_name = var.service_accounts
+      service_account_name = var.service_account
     }
   )
 
@@ -24,7 +24,7 @@ resource "kubectl_manifest" "external_secret" {
   yaml_body = templatefile(
     "${path.module}/files/external-secret.yaml",
     {
-      namespace = var.service_accounts      
+      namespace = var.project     
     }
   )
   depends_on = [kubectl_manifest.secret_store]

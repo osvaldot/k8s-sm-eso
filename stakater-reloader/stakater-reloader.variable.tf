@@ -1,3 +1,3 @@
-variable  namespaces {
+variable project {
   type = string
 }

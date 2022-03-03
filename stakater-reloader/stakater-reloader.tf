@@ -16,10 +16,10 @@ terraform {
 }
 
 resource "helm_release" "reloader" {
-  name       = "reloader-${var.namespaces}"
+  name       = "reloader-${var.project}"
   chart      = "reloader"
   repository = "https://stakater.github.io/stakater-charts"
-  namespace  = var.namespaces
+  namespace  = var.project
   version    = "v0.0.103"
 
   set {
