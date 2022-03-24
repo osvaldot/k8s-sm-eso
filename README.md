@@ -3,7 +3,7 @@
 How to manage our [Kubernetes](https://kubernetes.io) secrets with [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) 
 as a single source of truth with [External Secrets Operator](https://external-secrets.io/) in [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/)
 
-Note: the project is NOT a production ready code, is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/)
+Note: the project is NOT a production ready code, is a sample code used in [Spakfabrik tech post](https://tech.sparkfabrik.com/), 
 [Integrate external secrets management systems in Kubernetes](https://tech.sparkfabrik.com/en/blog/integrate-external-secrets-management-systems-in-kubernetes/)
 
 
